@@ -35,4 +35,21 @@ const registerUserValidation = (req) => {
     return true;
 };
 
-module.exports = {registerUserValidation}
+const loginUserValidation = (req)=>{
+    const {email,password}=req.body;
+    if(!email){
+        const err = new Error("Email is required");
+        err.name="validationError";
+        throw err;
+    }
+
+    if(!password){
+        const err = new Error("Enter your password");
+        err.name="validationError";
+        throw err;
+    }
+
+    return true;
+}
+
+module.exports = {registerUserValidation,loginUserValidation}

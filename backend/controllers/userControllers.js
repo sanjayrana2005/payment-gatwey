@@ -1,9 +1,9 @@
 
 const bcrypt = require("bcrypt");
-const { registerUserValidation } = require("../Validation/userValidation");
+const { registerUserValidation, loginUserValidation } = require("../Validation/userValidation");
 const userModel = require("../Models/userModel");
 
-const registerUser = async (req, res) => {
+const registerUserController = async (req, res) => {
     const { name, email, password } = req.body;
     try {
         registerUserValidation(req);
@@ -40,4 +40,36 @@ const registerUser = async (req, res) => {
     }
 }
 
-module.exports = {registerUser}
+const loginUserController = async (req,res) =>{
+    try {
+        const {email,password}=req.body;
+        loginUserValidation(req);
+        const user = await userModel.findOne({email}).select("password");
+        if(!user){
+            return res.status(401).json({
+                message:"User not found"
+            });
+        }
+        const decode =await bcrypt.compare(password,user.password);
+        if(!decode){
+            return res.status(401).json({
+                message:"Invalid credentials"
+            })
+        }
+
+        res.status(200).json({
+            message:"Login successfull"
+        })
+    } catch (error) {
+        if(error.name==="validationError"){
+            return res.status(400).json({
+                message:error.message
+            })
+        }
+        res.status(500).json({
+            message:"Internal server Error"
+        })
+    }
+}
+
+module.exports = {registerUserController,loginUserController}
