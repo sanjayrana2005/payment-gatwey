@@ -1,0 +1,90 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
+
+const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4">
+      
+      {/* Card */}
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+        
+        {/* Heading */}
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-slate-800">
+            Welcome Back
+          </h2>
+          <p className="text-slate-500 mt-2">
+            Login to continue to your account
+          </p>
+        </div>
+
+        {/* Form */}
+        <form className="space-y-6">
+
+          {/* Email */}
+          <div>
+            <label className="block text-sm font-medium text-slate-600 mb-1">
+              Email address
+            </label>
+            <input
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+            />
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="block text-sm font-medium text-slate-600 mb-1">
+              Password
+            </label>
+
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Enter your password"
+                className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+              />
+
+              {/* Eye Toggle */}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+          </div>
+
+
+          {/* Login Button */}
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition"
+          >
+            Login
+          </button>
+        </form>
+
+        {/* Footer */}
+        <p className="text-center text-sm text-slate-500 mt-6">
+          Don’t have an account?{" "}
+          <Link
+            to="/signup"
+            className="text-blue-600 font-medium hover:underline"
+          >
+            Create one
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
