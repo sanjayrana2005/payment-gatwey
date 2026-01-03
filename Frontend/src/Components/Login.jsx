@@ -4,6 +4,13 @@ import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [email,setEmail]=useState("");
+  const [password,setPassword]=useState("");
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4">
@@ -32,8 +39,10 @@ const Login = () => {
             <input
               type="email"
               name="email"
+              value={email}
               placeholder="you@example.com"
               className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+              onChange={(e)=>setEmail(e.target.value)}
             />
           </div>
 
@@ -47,8 +56,10 @@ const Login = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
+                value={password}
                 placeholder="Enter your password"
                 className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+                onChange={(e)=>setPassword(e.target.value)}
               />
 
               {/* Eye Toggle */}
@@ -66,7 +77,8 @@ const Login = () => {
           {/* Login Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition cursor-pointer"
+            onClick={handleLogin}
           >
             Login
           </button>
