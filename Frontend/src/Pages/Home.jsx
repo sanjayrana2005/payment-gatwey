@@ -6,7 +6,7 @@ const Home = () => {
 
             {/* Navbar */}
             <nav className="bg-slate-900 text-white px-10 py-4 flex justify-between items-center">
-                <h1 className="text-2xl font-bold tracking-wide">PAYMENT</h1>
+                <Link to="/" className="text-2xl font-bold tracking-wide cursor-pointer">PAYMENT</Link>
                 <Link
                     to="/login"
                     className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition"

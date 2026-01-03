@@ -8,7 +8,7 @@ const Subscription = ({ user }) => {
 
       {/* Navbar */}
       <nav className="bg-slate-900 text-white px-6 md:px-10 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold tracking-wide">PAYMENT</h1>
+        <Link to="/" className="text-2xl font-bold tracking-wide cursor-pointer">PAYMENT</Link>
 
         {/* User Profile */}
         <div className="flex items-center gap-4">
@@ -42,7 +42,7 @@ const Subscription = ({ user }) => {
             <h2 className="text-2xl font-bold mb-2 text-slate-800">Basic</h2>
             <p className="text-slate-500 mb-6">Perfect for personal use</p>
             <span className="text-4xl font-bold text-blue-600 mb-6">
-              $9<span className="text-base font-normal">/month</span>
+              299<span className="text-base font-normal">/month</span>
             </span>
 
             <ul className="mb-6 space-y-2 text-slate-600">
@@ -64,7 +64,7 @@ const Subscription = ({ user }) => {
             <h2 className="text-2xl font-bold mb-2 text-slate-800">Pro</h2>
             <p className="text-slate-500 mb-6">Best for growing businesses</p>
             <span className="text-4xl font-bold text-blue-600 mb-6">
-              $29<span className="text-base font-normal">/month</span>
+              499<span className="text-base font-normal">/month</span>
             </span>
 
             <ul className="mb-6 space-y-2 text-slate-600">
