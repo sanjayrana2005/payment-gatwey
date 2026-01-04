@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import axios from "axios"
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email,setEmail]=useState("");
   const [password,setPassword]=useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin =async (e) => {
     e.preventDefault();
+
+    const {data} = await axios.post(import.meta.env.VITE_BACKEND_URL/api/user/login)
     
   }
 
