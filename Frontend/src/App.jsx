@@ -5,19 +5,37 @@ import Login from './Components/Login'
 import Subscription from './Components/Subscription'
 import Signup from './Components/Signup'
 import { Navigate } from "react-router-dom";
+  import { useEffect, useState } from "react";
+import axios from "axios";
 
 const App = () => {
 
-
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem("paymentToken"); // or cookie check
+  const [loading, setLoading] = useState(true);
+  const [auth, setAuth] = useState(false);
 
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/check`, {
+      withCredentials: true
+    })
+    .then(() => {
+      setAuth(true);
+      setLoading(false);
+    })
+    .catch(() => {
+      setAuth(false);
+      setLoading(false);
+    });
+  }, []);
 
-  return children;
+  if (loading) return <p>Loading...</p>;
+
+  return auth ? children : <Navigate to="/login" replace />;
 };
+
+
+
+
 
 
   return (
@@ -27,9 +45,9 @@ const ProtectedRoute = ({ children }) => {
       <Route path='/signup' element={<Signup />} />
       <Route path='/subscription' element={
         <ProtectedRoute>
-        <Subscription />
+          <Subscription />
         </ProtectedRoute>
-        } />
+      } />
     </Routes>
   )
 }
