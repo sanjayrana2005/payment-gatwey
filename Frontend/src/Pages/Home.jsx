@@ -1,18 +1,40 @@
 import { Link } from "react-router-dom";
 
-const Home = () => {
+const Home = ({ isAuth }) => {
     return (
         <div className="min-h-screen flex flex-col bg-slate-50">
 
             {/* Navbar */}
             <nav className="bg-slate-900 text-white px-10 py-4 flex justify-between items-center">
                 <Link to="/" className="text-2xl font-bold tracking-wide cursor-pointer">PAYMENT</Link>
-                <Link
-                    to="/login"
-                    className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition"
-                >
-                    Login
-                </Link>
+                {
+                    isAuth ? (
+                        <div className="relative">
+                            <div className="flex items-center gap-4 cursor-pointer group">
+                                <span className="hidden md:block text-slate-200 font-medium">{"user.name"}</span>
+                                <img
+                                    src={"user.avatar" || "https://via.placeholder.com/40"}
+                                    alt="Profile"
+                                    className="w-10 h-10 rounded-full border-2 border-blue-600 object-cover"
+                                />
+                            </div>
+                            <div className="bg-red-500 opacity-0 group-hover:opacity-100 absolute">
+                                Logout
+                            </div>
+
+                        </div>
+
+
+
+                    ) : (
+                        <Link
+                            to="/login"
+                            className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition"
+                        >
+                            Login
+                        </Link>
+                    )
+                }
             </nav>
 
             {/* Hero Section */}

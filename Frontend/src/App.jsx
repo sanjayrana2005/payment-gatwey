@@ -9,10 +9,13 @@ import { Navigate } from "react-router-dom";
 import axios from "axios";
 
 const App = () => {
-
-const ProtectedRoute = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [auth, setAuth] = useState(false);
+
+const ProtectedRoute = ({ children }) => {
+  if (loading) return <p>Loading...</p>;
+  return auth ? children : <Navigate to="/login" replace />;
+};
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/check`, {
@@ -28,19 +31,9 @@ const ProtectedRoute = ({ children }) => {
     });
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-
-  return auth ? children : <Navigate to="/login" replace />;
-};
-
-
-
-
-
-
   return (
     <Routes>
-      <Route path='/' element={<Home />} />
+      <Route path='/' element={<Home isAuth={auth}/>} />
       <Route path='/login' element={<Login />} />
       <Route path='/signup' element={<Signup />} />
       <Route path='/subscription' element={
