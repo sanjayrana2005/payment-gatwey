@@ -1,3 +1,4 @@
+import { UserRound } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Home = ({ isAuth }) => {
@@ -9,23 +10,13 @@ const Home = ({ isAuth }) => {
                 <Link to="/" className="text-2xl font-bold tracking-wide cursor-pointer">PAYMENT</Link>
                 {
                     isAuth ? (
-                        <div className="relative">
-                            <div className="flex items-center gap-4 cursor-pointer group">
+                            <div className="relative flex items-center gap-4 cursor-pointer group">
                                 <span className="hidden md:block text-slate-200 font-medium">{"user.name"}</span>
-                                <img
-                                    src={"user.avatar" || "https://via.placeholder.com/40"}
-                                    alt="Profile"
-                                    className="w-10 h-10 rounded-full border-2 border-blue-600 object-cover"
-                                />
+                                <UserRound />
+                                <div className="absolute top-12 right-0   bg-white text-black px-5 py-1 rounded-md opacity-0 group-hover:opacity-100">
+                                    Logout
+                                </div>
                             </div>
-                            <div className="bg-red-500 opacity-0 group-hover:opacity-100 absolute">
-                                Logout
-                            </div>
-
-                        </div>
-
-
-
                     ) : (
                         <Link
                             to="/login"
