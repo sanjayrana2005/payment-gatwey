@@ -1,29 +1,64 @@
 import { UserRound } from "lucide-react";
-import { Link } from "react-router-dom";
+import { data, Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
 
 const Subscription = ({ user }) => {
-  // user = { name: "Sanjay", email: "sanjay@example.com", avatar: "profile-image-url" }
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // LOGOUT HANDLER (Works on mobile + desktop)
+  const logoutHandle = async () => {
+    try {
+     const {data}= await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/logout`,
+        {},
+        { withCredentials: true }
+      );
+      // Redirect to login
+      navigate("/");
+      console.log(data)
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col">
-
-      {/* Navbar */}
+      {/* ================= NAVBAR ================= */}
       <nav className="bg-slate-900 text-white px-6 md:px-10 py-4 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold tracking-wide cursor-pointer">PAYMENT</Link>
+        <Link to="/" className="text-2xl font-bold tracking-wide">
+          PAYMENT
+        </Link>
 
-        {/* User Profile */}
-        <div className="relative flex items-center gap-4 cursor-pointer group">
-          <span className="hidden md:block text-slate-200 font-medium">{"user.name"}</span>
-          <UserRound />
-          <div className="absolute top-12 right-0 bg-gray-400 text-white px-5 py-1 rounded-md opacity-0 group-hover:opacity-100">
-            Logout
-          </div>
+        {/* USER MENU */}
+        <div className="relative">
+          <button
+            onClick={() => setOpen(!open)}
+            className="flex items-center gap-2 focus:outline-none"
+          >
+            <span className="hidden md:block text-slate-200">
+              {user?.name || "User"}
+            </span>
+            <UserRound />
+          </button>
+
+          {/* DROPDOWN (PHONE + DESKTOP) */}
+          {open && (
+            <div className="absolute right-0 mt-2 bg-white text-slate-800 rounded-lg shadow-lg w-36 z-50">
+              <button
+                onClick={logoutHandle}
+                className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg"
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </nav>
 
-      {/* Page Content */}
+      {/* ================= PAGE CONTENT ================= */}
       <div className="flex flex-col items-center px-4 py-12">
-
         {/* Heading */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-800 mb-3">
@@ -36,13 +71,12 @@ const Subscription = ({ user }) => {
 
         {/* Plans */}
         <div className="grid gap-8 sm:grid-cols-2 w-full max-w-4xl">
-
-          {/* Basic Plan */}
+          {/* BASIC PLAN */}
           <div className="bg-white rounded-3xl shadow-lg p-8 flex flex-col items-center text-center transform transition hover:scale-105 hover:shadow-2xl">
             <h2 className="text-2xl font-bold mb-2 text-slate-800">Basic</h2>
             <p className="text-slate-500 mb-6">Perfect for personal use</p>
             <span className="text-4xl font-bold text-blue-600 mb-6">
-              299<span className="text-base font-normal">/month</span>
+              ₹299<span className="text-base font-normal">/month</span>
             </span>
 
             <ul className="mb-6 space-y-2 text-slate-600">
@@ -59,12 +93,12 @@ const Subscription = ({ user }) => {
             </Link>
           </div>
 
-          {/* Pro Plan */}
+          {/* PRO PLAN */}
           <div className="bg-white rounded-3xl shadow-lg p-8 flex flex-col items-center text-center border-2 border-blue-600 transform transition hover:scale-105 hover:shadow-2xl">
             <h2 className="text-2xl font-bold mb-2 text-slate-800">Pro</h2>
             <p className="text-slate-500 mb-6">Best for growing businesses</p>
             <span className="text-4xl font-bold text-blue-600 mb-6">
-              499<span className="text-base font-normal">/month</span>
+              ₹499<span className="text-base font-normal">/month</span>
             </span>
 
             <ul className="mb-6 space-y-2 text-slate-600">
@@ -81,10 +115,9 @@ const Subscription = ({ user }) => {
               Choose Pro
             </Link>
           </div>
-
         </div>
 
-        {/* Footer Note */}
+        {/* Footer */}
         <p className="text-center text-sm text-slate-500 mt-12 max-w-md">
           Cancel anytime. No hidden fees. Your security is our priority.
         </p>

@@ -1,33 +1,38 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios"
 
-const Login = () => {
+const Login = ({setUser}) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email,setEmail]=useState("");
-  const [password,setPassword]=useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigateTo = useNavigate();
 
-  const handleLogin =async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    const {data} = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/user/login`,
+    const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/user/login`,
       {
         email,
         password
-      },{
-        withCredentials:true
-      });
-      console.log(data)
-    
+      }, {
+      withCredentials: true
+    });
+    setUser(data.safeUser);
+    localStorage.setItem("user", JSON.stringify(data.safeUser));
+
+    // 🔥 PASS USER VIA NAVIGATION
+    navigateTo("/", { state: { user: data.safeUser } });
+
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4">
-      
+
       {/* Card */}
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-        
+
         {/* Heading */}
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-slate-800">
@@ -52,7 +57,7 @@ const Login = () => {
               value={email}
               placeholder="you@example.com"
               className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
-              onChange={(e)=>setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -69,7 +74,7 @@ const Login = () => {
                 value={password}
                 placeholder="Enter your password"
                 className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
-                onChange={(e)=>setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
 
               {/* Eye Toggle */}

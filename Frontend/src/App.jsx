@@ -12,6 +12,10 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [auth, setAuth] = useState(false);
 
+   const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user"))
+  );
+
 const ProtectedRoute = ({ children }) => {
   if (loading) return <p>Loading...</p>;
   return auth ? children : <Navigate to="/login" replace />;
@@ -34,11 +38,11 @@ const ProtectedRoute = ({ children }) => {
   return (
     <Routes>
       <Route path='/' element={<Home isAuth={auth}/>} />
-      <Route path='/login' element={<Login />} />
+      <Route path='/login' element={<Login setUser={setUser}/>} />
       <Route path='/signup' element={<Signup />} />
       <Route path='/subscription' element={
         <ProtectedRoute>
-          <Subscription />
+          <Subscription user={user}/>
         </ProtectedRoute>
       } />
     </Routes>

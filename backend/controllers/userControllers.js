@@ -94,6 +94,27 @@ const loginUserController = async (req, res) => {
     }
 }
 
+const logoutController = async (req, res) => {
+  try {
+    res.clearCookie("paymentToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",// true in production (HTTPS)
+      sameSite: "strict",  // REQUIRED for frontend-backend different domains
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Logout failed",
+    });
+  }
+};
 
 
-module.exports = { registerUserController, loginUserController }
+
+
+module.exports = { registerUserController, loginUserController,logoutController }

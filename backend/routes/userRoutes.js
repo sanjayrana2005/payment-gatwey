@@ -1,5 +1,5 @@
 const express = require("express");
-const {  registerUserController, loginUserController } = require("../controllers/userControllers");
+const {  registerUserController, loginUserController, logoutController } = require("../controllers/userControllers");
 const userRouter = express.Router();
 
 userRouter.post("/signup",registerUserController);
@@ -14,6 +14,8 @@ userRouter.get("/check", (req, res) => {
 
   res.json({ authenticated: true });
 });
+
+userRouter.post("/logout",logoutController);
 
 
 module.exports = userRouter
