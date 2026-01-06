@@ -35,12 +35,12 @@ const Subscription = ({ user }) => {
         <div className="relative">
           <button
             onClick={() => setOpen(!open)}
-            className="flex items-center gap-2 focus:outline-none"
+            className="flex items-center gap-2 focus:outline-none "
           >
             <span className="hidden md:block text-slate-200">
               {user?.name || "User"}
             </span>
-            <UserRound />
+            <UserRound className="cursor-pointer"/>
           </button>
 
           {/* DROPDOWN (PHONE + DESKTOP) */}
