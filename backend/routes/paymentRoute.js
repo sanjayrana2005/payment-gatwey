@@ -5,6 +5,6 @@ const {createOrder,webhookController} = require("../controllers/paymentControlle
 const paymentRouter = express.Router();
 
 paymentRouter.post("/order",authUser,createOrder);
-paymentRouter.post("/webhook",webhookController);
+paymentRouter.post("/webhook", express.raw({ type: "application/json" }),webhookController);
 
 module.exports=paymentRouter;

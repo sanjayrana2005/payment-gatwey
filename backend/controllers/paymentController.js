@@ -52,7 +52,7 @@ const createOrder = async (req, res) => {
 const webhookController =async (req,res) => {
 
     try {
-        const webhookSignature = req.headers["X-razorpay-signature"];
+        const webhookSignature = req.headers["x-razorpay-signature"];
         const isWebhookValid =  validateWebhookSignature(
             JSON.stringify(req.body),
             webhookSignature,
