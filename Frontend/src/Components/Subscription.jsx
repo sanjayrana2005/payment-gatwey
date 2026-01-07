@@ -1,4 +1,4 @@
-import { UserRound } from "lucide-react";
+import { Save, UserRound } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
@@ -34,7 +34,25 @@ const Subscription = ({ user }) => {
           withCredentials:true
         }
       )
-      console.log(data)
+      const {amount,currency,orderId,notes} = data.saveOrder;
+       const options = {
+        key:  data.key_id, // Replace with your Razorpay key_id
+        amount, // Amount is in currency subunits.
+        currency,
+        name: "Payment",
+        description: 'Pay to get subscription',
+        order_id:orderId , // This is the order_id created in the backend
+        prefill: {
+          name: notes.name,
+        },
+        theme: {
+          color: '#F37254'
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+      console.log(saveOrder)
     } catch (error) {
       toast.error(error?.response?.data?.message)
     }
