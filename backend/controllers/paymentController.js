@@ -70,6 +70,7 @@ const webhookController =async (req,res) => {
         const payment = await paymentModel.findOne({
             orderId:paymentDetails.order_id
         });
+        console.log(paymentDetails)
         payment.status= paymentDetails.status;
         payment.paymentId=paymentDetails.id
         await payment.save();
