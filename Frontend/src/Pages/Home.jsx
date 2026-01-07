@@ -2,21 +2,17 @@ import { UserRound } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
-const Home = ({ isAuth }) => {
+const Home = ({ user, isAuth, setUser }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const [user] = useState(
-    location.state?.user || JSON.parse(localStorage.getItem("user"))
-  );
-
-  // ✅ LOGOUT FUNCTION
   const handleLogout = async () => {
     try {
-      await axios.post(
+      const {data} = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/user/logout`,
         {},
         { withCredentials: true }
@@ -24,6 +20,8 @@ const Home = ({ isAuth }) => {
 
       localStorage.removeItem("user");
       setMenuOpen(false);
+      setUser(null)
+      toast.success(data.message);
       navigate("/login");
     } catch (err) {
       console.error("Logout failed", err);
@@ -39,7 +37,6 @@ const Home = ({ isAuth }) => {
 
         {isAuth ? (
           <div className="relative">
-            {/* USER ICON */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="flex items-center gap-2"
@@ -47,14 +44,14 @@ const Home = ({ isAuth }) => {
               <span className="hidden md:block text-slate-200 font-medium">
                 {user?.name}
               </span>
-              <UserRound className="cursor-pointer"/>
+              <UserRound />
             </button>
 
             {menuOpen && (
-              <div className="absolute right-0 mt-2 bg-white text-black rounded-lg shadow-lg w-40 z-50">
+              <div className="absolute right-0 mt-2 bg-white text-black rounded-lg shadow-lg w-40">
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 w-full px-4 py-2 hover:bg-gray-100"
+                  className="w-full px-4 py-2 hover:bg-gray-100"
                 >
                   Logout
                 </button>
@@ -64,11 +61,12 @@ const Home = ({ isAuth }) => {
         ) : (
           <Link
             to="/login"
-            className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition"
+            className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700"
           >
             Login
           </Link>
         )}
+
       </nav>
 
       <section className="flex flex-col items-center text-center px-4 sm:px-6 py-16 sm:py-20 md:py-28 bg-gradient-to-r from-blue-600 to-indigo-800 text-white">

@@ -2,6 +2,7 @@ import { UserRound } from "lucide-react";
 import { data, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const Subscription = ({ user }) => {
   const [open, setOpen] = useState(false);
@@ -18,6 +19,7 @@ const Subscription = ({ user }) => {
       // Redirect to login
       navigate("/");
       console.log(data)
+      toast.success(data.message);
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -25,7 +27,6 @@ const Subscription = ({ user }) => {
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col">
-      {/* ================= NAVBAR ================= */}
       <nav className="bg-slate-900 text-white px-6 md:px-10 py-4 flex justify-between items-center">
         <Link to="/" className="text-2xl font-bold tracking-wide">
           PAYMENT
