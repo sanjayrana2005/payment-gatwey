@@ -5,6 +5,7 @@ require("dotenv").config();
 const cors = require("cors");
 const userRouter = require("./routes/userRoutes");
 const cookieParser = require("cookie-parser");
+const paymentRouter = require("./routes/paymentRoute");
 
 app.use(express.json());
 app.use(cors({
@@ -14,8 +15,7 @@ app.use(cors({
 app.use(cookieParser());
 
 app.use("/api/user",userRouter);
-
-
+app.use("/api/payment",paymentRouter);
 
 
 app.get("/", (req, res) => {
