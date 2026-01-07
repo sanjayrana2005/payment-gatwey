@@ -27,7 +27,7 @@ const registerUserController = async (req, res) => {
         res.cookie("paymentToken", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "none",
             expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
         });
         const safeUser = await userModel.findOne({email})
@@ -71,7 +71,7 @@ const loginUserController = async (req, res) => {
         res.cookie("paymentToken", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "none",
             expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
         });
 
@@ -99,7 +99,7 @@ const logoutController = async (req, res) => {
     res.clearCookie("paymentToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",// true in production (HTTPS)
-      sameSite: "strict",  // REQUIRED for frontend-backend different domains
+      sameSite: "none",  // REQUIRED for frontend-backend different domains
     });
 
     return res.status(200).json({
