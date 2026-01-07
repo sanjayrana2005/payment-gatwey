@@ -52,7 +52,6 @@ const Subscription = ({ user }) => {
 
       const rzp = new window.Razorpay(options);
       rzp.open();
-      console.log(saveOrder)
     } catch (error) {
       toast.error(error?.response?.data?.message)
     }
