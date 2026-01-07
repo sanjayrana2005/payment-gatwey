@@ -5,10 +5,12 @@ const createOrder = async (req, res) => {
     const user = req.user;
     const { planType } = req.body;
     try {
+        const receipt = `PAY-${Date.now().toString().slice(-8)}-${Math.random().toString(36).slice(2,6)}`;
+
         var options = {
             amount: planAmount[planType] * 100,  // Amount is in currency subunits. in paisa 
             currency: "INR",
-            receipt: "order_rcptid_11",
+            receipt,
             notes: {
                 "name": user.name,
                 "planType": planType

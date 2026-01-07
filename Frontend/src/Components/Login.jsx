@@ -4,10 +4,11 @@ import { Eye, EyeOff } from "lucide-react";
 import axios from "axios"
 import { toast } from "react-toastify";
 
-const Login = ({setUser}) => {
+const Login = ({ setUser }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigateTo = useNavigate();
 
   const handleLogin = async (e) => {
@@ -15,19 +16,23 @@ const Login = ({setUser}) => {
 
     try {
       const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/user/login`,
-      {
-        email,
-        password
-      }, {
-      withCredentials: true
-    });
-    setUser(data.safeUser);
-    localStorage.setItem("user", JSON.stringify(data.safeUser));
-    toast.success(data?.message)
+        {
+          email,
+          password
+        }, {
+        withCredentials: true
+      });
+      if(data){
+        setLoading(false)
+      }
+      setUser(data.safeUser);
+      localStorage.setItem("user", JSON.stringify(data.safeUser));
+      toast.success(data?.message);
 
-    // 🔥 PASS USER VIA NAVIGATION
-    navigateTo("/");
+      // 🔥 PASS USER VIA NAVIGATION
+      navigateTo("/");
     } catch (error) {
+      setLoading(false)
       toast.error(error?.response?.data?.message)
     }
 
@@ -61,7 +66,6 @@ const Login = ({setUser}) => {
               type="email"
               name="email"
               value={email}
-              required
               placeholder="you@example.com"
               className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
               onChange={(e) => setEmail(e.target.value)}
@@ -79,7 +83,6 @@ const Login = ({setUser}) => {
                 type={showPassword ? "text" : "password"}
                 name="password"
                 value={password}
-                required
                 placeholder="Enter your password"
                 className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
                 onChange={(e) => setPassword(e.target.value)}
@@ -88,7 +91,7 @@ const Login = ({setUser}) => {
               {/* Eye Toggle */}
               <button
                 type="button"
-                onClick={()=>setShowPassword(!showPassword)}
+                onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 cursor-pointer"
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -100,9 +103,12 @@ const Login = ({setUser}) => {
           {/* Login Button */}
           <button
             type="submit"
+            onClick={()=>setLoading(true)}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition cursor-pointer"
           >
-            Login
+            {
+              loading ? "Loading..." :
+                "Login"}
           </button>
         </form>
 

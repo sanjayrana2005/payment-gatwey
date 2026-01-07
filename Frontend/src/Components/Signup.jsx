@@ -1,9 +1,34 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const navigateTo =useNavigate();
+
+    const handleSignup = async (e) => {
+        e.preventDefault();
+        try {
+            const {data} = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/user/signup`,{
+                name,email,password
+            });
+
+            if(data){
+                setLoading(false);
+                toast.success(data.message);
+                navigateTo("/");
+            }
+        } catch (error) {
+            setLoading(false);
+            toast.error(error?.response?.data?.message)
+        }
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4">
@@ -20,7 +45,7 @@ const Login = () => {
                 </div>
 
                 {/* Form */}
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSignup}>
 
                     <div>
                         <label htmlFor="name" className="block text-sm font-medium text-slate-600 mb-1">
@@ -30,6 +55,8 @@ const Login = () => {
                             id="name"
                             type="text"
                             name="name"
+                            value={name}
+                            onChange={(e)=>setName(e.target.value)}
                             placeholder="Enter your name"
                             className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
                         />
@@ -44,6 +71,8 @@ const Login = () => {
                             id="email"
                             type="email"
                             name="email"
+                            value={email}
+                            onChange={(e)=>setEmail(e.target.value)}
                             placeholder="Enter your email"
                             className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
                         />
@@ -60,6 +89,8 @@ const Login = () => {
                                 type={showPassword ? "text" : "password"}
                                 id="password"
                                 name="password"
+                                value={password}
+                                onChange={(e)=>setPassword(e.target.value)}
                                 placeholder="Enter your password"
                                 className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
                             />
@@ -68,7 +99,7 @@ const Login = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+                                className="cursor-pointer absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
                             >
                                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                             </button>
@@ -78,10 +109,13 @@ const Login = () => {
 
                     {/* Login Button */}
                     <button
-                        type="submit"
+
+                        onClick={()=>setLoading(true)}
                         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition cursor-pointer"
                     >
-                        Create Account
+                        {
+                            loading ? "Creating..." : "Create Account"
+                        }
                     </button>
                 </form>
 
