@@ -52,7 +52,7 @@ const createOrder = async (req, res) => {
 const webhookController =async (req,res) => {
 
     try {
-        const webhookSignature = req.get["X-Razorpay-Signature"];
+        const webhookSignature = req.get("X-Razorpay-Signature");
         const isWebhookValid =  validateWebhookSignature(
             JSON.stringify(req.body),
             webhookSignature,
@@ -74,7 +74,7 @@ const webhookController =async (req,res) => {
         payment.paymentId=paymentDetails.id
         await payment.save();
 
-        
+
         // if(req.body.event =="payment.captured"){
             
         // }
@@ -93,4 +93,7 @@ const webhookController =async (req,res) => {
     }
 }
 
-module.exports = { createOrder, webhookController }
+module.exports = { 
+    createOrder, 
+    webhookController 
+}
