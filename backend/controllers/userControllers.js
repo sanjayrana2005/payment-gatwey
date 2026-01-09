@@ -25,7 +25,7 @@ const registerUserController = async (req, res) => {
 
         const token = generateToken(newUser._id);
         res.cookie("paymentToken", token, {
-            httpOnly: true,
+            httpOnly: false,
             secure: process.env.NODE_ENV === "production",
             sameSite: "none",
             expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -69,7 +69,7 @@ const loginUserController = async (req, res) => {
 
         const token = generateToken(user._id);
         res.cookie("paymentToken", token, {
-            httpOnly: true,
+            httpOnly: false,
             secure: process.env.NODE_ENV === "production",
             sameSite: "none",
             expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)

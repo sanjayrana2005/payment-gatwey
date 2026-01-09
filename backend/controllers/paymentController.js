@@ -23,6 +23,7 @@ const createOrder = async (req, res) => {
             }
         };
         const order = await instance.orders.create(options);
+        console.log("order", order)
 
         const payment = new paymentModel({
             userId: req.user._id,
@@ -49,42 +50,45 @@ const createOrder = async (req, res) => {
     }
 }
 
-const webhookController =async (req,res) => {
+const webhookController = async (req, res) => {
 
     try {
         const webhookSignature = req.headers["x-razorpay-signature"];
-        const isWebhookValid =  validateWebhookSignature(
-            req.body,
+        const isWebhookValid = validateWebhookSignature(
+            JSON.stringify(req.body),
             webhookSignature,
             process.env.RAZORPAY_WEBHOOK_SECRET
         );
 
-        if(!isWebhookValid){
+        if (!isWebhookValid) {
             return res.status(400).json({
-                message:"webhook signature is not valid"
+                message: "webhook signature is not valid"
             })
         }
 
         //updating payment status in db
         const paymentDetails = req.body.payload.payment.entity;
         const payment = await paymentModel.findOne({
-            orderId:paymentDetails.order_id
+            orderId: paymentDetails.order_id
         });
-        console.log(paymentDetails)
-        payment.status= paymentDetails.status;
-        payment.paymentId=paymentDetails.id
+        if (!payment) {
+            console.log("❌ No payment found for orderId:", paymentDetails.order_id);
+            return res.status(404).send("Payment not found");
+        }
+        payment.status = paymentDetails.status;
+        payment.paymentId = paymentDetails.id
         await payment.save();
 
 
         // if(req.body.event =="payment.captured"){
-            
+
         // }
         // if(req.body.event =="payment.failed"){
 
         // }
 
         res.status(200).json({
-            message:"webhook recieved successfull"
+            message: "webhook recieved successfull"
         });
 
     } catch (error) {
@@ -94,7 +98,7 @@ const webhookController =async (req,res) => {
     }
 }
 
-module.exports = { 
-    createOrder, 
-    webhookController 
+module.exports = {
+    createOrder,
+    webhookController
 }
