@@ -75,25 +75,31 @@ const webhookController = async (req, res) => {
             console.log("❌ No payment found for orderId:", paymentDetails.order_id);
             return res.status(404).send("Payment not found");
         }
-        payment.status = paymentDetails.status;
-        payment.paymentId = paymentDetails.id
-        await payment.save();
 
-        const planType = payment.notes.planType;
+        if (paymentDetails.status === "captured") {
 
-        await userModel.findByIdAndUpdate(payment.userId, {
-                planType,
-                isPremium:true,
-            }
-        );
+            payment.status = "captured";
+            payment.paymentId = paymentDetails.id;
+            await payment.save();
 
+            const planType = payment.notes.planType;
 
-        // if(req.body.event =="payment.captured"){
+            await userModel.findByIdAndUpdate(payment.userId, {
+                isPremium: true,
+                planType: planType
+            });
 
-        // }
-        // if(req.body.event =="payment.failed"){
+            console.log("✅ User upgraded to premium:", planType);
+        }
 
-        // }
+        // 🔴 FAILED PAYMENT
+        if (paymentDetails.status === "failed") {
+            payment.status = "failed";
+            payment.paymentId = paymentDetails.id;
+            await payment.save();
+
+            console.log("❌ Payment failed");
+        }
 
         res.status(200).json({
             message: "webhook recieved successfull"
