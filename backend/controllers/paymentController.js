@@ -79,6 +79,14 @@ const webhookController = async (req, res) => {
         payment.paymentId = paymentDetails.id
         await payment.save();
 
+        const planType = payment.notes.planType;
+
+        await userModel.findByIdAndUpdate(payment.userId, {
+                planType,
+                isPremium:true,
+            }
+        );
+
 
         // if(req.body.event =="payment.captured"){
 

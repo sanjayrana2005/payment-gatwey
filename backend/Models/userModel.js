@@ -13,7 +13,17 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
         select: false
+    },
+    isPremium: {
+        type: Boolean,
+        default: false
+    },
+    planType: {
+        type: String,
+        default: "FREE"
     }
+
+
 }, { timestamps: true });
 
 const userModel = mongoose.model("user", userSchema);
