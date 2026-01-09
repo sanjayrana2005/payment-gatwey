@@ -2,7 +2,8 @@ const instance = require("../utils/razorpay");
 const planAmount = require('../utils/constant');
 const paymentModel = require("../Models/paymentModels");
 require("dotenv").config();
-const { validateWebhookSignature } = require('razorpay/dist/utils/razorpay-utils')
+const { validateWebhookSignature } = require('razorpay/dist/utils/razorpay-utils');
+const userModel = require("../Models/userModel");
 
 
 
