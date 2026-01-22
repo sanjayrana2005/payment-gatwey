@@ -6,6 +6,7 @@ const authUser =async (req, res, next) => {
     try {
         if (!paymentToken) {
             return res.status(401).json({
+                authenticated:false,
                 message: "Unauthorized login"
             })
         };

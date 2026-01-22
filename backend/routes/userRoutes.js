@@ -1,21 +1,22 @@
 const express = require("express");
-const {  registerUserController, loginUserController, logoutController } = require("../controllers/userControllers");
+const { registerUserController, loginUserController, logoutController } = require("../controllers/userControllers");
+const authUser = require("../middleware/auth");
 const userRouter = express.Router();
 
-userRouter.post("/signup",registerUserController);
-userRouter.post("/login",loginUserController);
+userRouter.post("/signup", registerUserController);
+userRouter.post("/login", loginUserController);
 // routes/auth.js
-userRouter.get("/check", (req, res) => {
-  const token = req.cookies.paymentToken;
+userRouter.get("/check", authUser, (req, res) => {
 
-  if (!token) {
-    return res.status(401).json({ authenticated: false });
-  }
+  const user = req.user
 
-  res.json({ authenticated: true });
+  res.json({
+    authenticated: true,
+    user
+  });
 });
 
-userRouter.post("/logout",logoutController);
+userRouter.post("/logout", logoutController);
 
 
 module.exports = userRouter

@@ -53,6 +53,19 @@ const Subscription = () => {
         theme: {
           color: '#F37254'
         },
+        handler: function () {
+      toast.info("Processing payment...");
+
+      // ⏳ Wait for webhook to hit backend
+      setTimeout(async () => {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/user/check`,
+          { withCredentials: true }
+        );
+
+        setUser(localStorage.setItem("user",res.data.user));
+      }, 3000); // wait 3 seconds
+    },
       };
 
       const rzp = new window.Razorpay(options);
@@ -62,6 +75,8 @@ const Subscription = () => {
       toast.error(error?.response?.data?.message)
     }
   }
+
+
 
 
   return (
