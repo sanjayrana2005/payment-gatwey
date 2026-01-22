@@ -9,8 +9,7 @@ import { userContext } from "../Context/UserContext";
 const Subscription = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const { user, setUser } = useContext(userContext)
-  console.log(user?.isPremium)
+  const { user, setUser,setAuth } = useContext(userContext)
 
   // LOGOUT HANDLER (Works on mobile + desktop)
   const logoutHandle = async () => {
@@ -23,6 +22,8 @@ const Subscription = () => {
       // Redirect to login
       navigate("/");
       setUser(null)
+      setAuth(false)
+      localStorage.removeItem("user")
       toast.success(data.message);
     } catch (error) {
       console.error("Logout failed:", error);
