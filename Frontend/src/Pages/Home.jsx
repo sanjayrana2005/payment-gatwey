@@ -1,18 +1,19 @@
 import { UserRound } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { userContext } from "../Context/UserContext";
 
-const Home = ({ user, isAuth, setUser }) => {
-  const location = useLocation();
+const Home = () => {
+  const { auth, setAuth, user, setUser } = useContext(userContext)
   const navigate = useNavigate();
 
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
-      const {data} = await axios.post(
+      const { data } = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/user/logout`,
         {},
         { withCredentials: true }
@@ -21,6 +22,7 @@ const Home = ({ user, isAuth, setUser }) => {
       localStorage.removeItem("user");
       setMenuOpen(false);
       setUser(null)
+      setAuth(false)
       toast.success(data.message);
       navigate("/login");
     } catch (err) {
@@ -35,7 +37,7 @@ const Home = ({ user, isAuth, setUser }) => {
           PAYMENT
         </Link>
 
-        {isAuth ? (
+        {auth ? (
           <div className="relative">
             <button
               onClick={() => setMenuOpen(!menuOpen)}

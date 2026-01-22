@@ -24,7 +24,6 @@ const createOrder = async (req, res) => {
             }
         };
         const order = await instance.orders.create(options);
-        console.log("order", order)
 
         const payment = new paymentModel({
             userId: req.user._id,
@@ -45,6 +44,7 @@ const createOrder = async (req, res) => {
             key_id
         });
     } catch (error) {
+        console.log(error)
         res.status(400).json({
             message: error.message
         });
